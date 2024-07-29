@@ -17,9 +17,9 @@ const float WHIRLPOOL_DG11J1_3A_TEMP_MIN = 18.0;
 const float WHIRLPOOL_DG11J1_91_TEMP_MAX = 30.0;
 const float WHIRLPOOL_DG11J1_91_TEMP_MIN = 16.0;
 
-class whirlpoolClimate : public climate_ir::ClimateIR {
+class WhirlpoolClimate : public climate_ir::ClimateIR {
  public:
-  whirlpoolClimate()
+  WhirlpoolClimate()
       : climate_ir::ClimateIR(temperature_min_(), temperature_max_(), 1.0f, true, true,
                               {climate::CLIMATE_FAN_AUTO, climate::CLIMATE_FAN_LOW, climate::CLIMATE_FAN_MEDIUM,
                                climate::CLIMATE_FAN_HIGH},
@@ -54,10 +54,10 @@ class whirlpoolClimate : public climate_ir::ClimateIR {
   Model model_;
 
   float temperature_min_() {
-    return (model_ == MODEL_DG11J1_3A) ? whirlpool_DG11J1_3A_TEMP_MIN : whirlpool_DG11J1_91_TEMP_MIN;
+    return (model_ == MODEL_DG11J1_3A) ? WHIRLPOOL_DG11J1_3A_TEMP_MIN : WHIRLPOOL_DG11J1_91_TEMP_MIN;
   }
   float temperature_max_() {
-    return (model_ == MODEL_DG11J1_3A) ? whirlpool_DG11J1_3A_TEMP_MAX : whirlpool_DG11J1_91_TEMP_MAX;
+    return (model_ == MODEL_DG11J1_3A) ? WHIRLPOOL_DG11J1_3A_TEMP_MAX : WHIRLPOOL_DG11J1_91_TEMP_MAX;
   }
 };
 
