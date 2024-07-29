@@ -6,40 +6,40 @@ namespace whirlpool {
 
 static const char *const TAG = "whirlpool.climate";
 
-const uint16_t whirlpool_HEADER_MARK = 9000;
-const uint16_t whirlpool_HEADER_SPACE = 4494;
-const uint16_t whirlpool_BIT_MARK = 610;
-const uint16_t whirlpool_ONE_SPACE = 1680;
-const uint16_t whirlpool_ZERO_SPACE = 565;
-const uint32_t whirlpool_GAP = 8007;
+const uint16_t WHIRLPOOL_HEADER_MARK = 9000;
+const uint16_t WHIRLPOOL_HEADER_SPACE = 4494;
+const uint16_t WHIRLPOOL_BIT_MARK = 572;
+const uint16_t WHIRLPOOL_ONE_SPACE = 1659;
+const uint16_t WHIRLPOOL_ZERO_SPACE = 553;
+const uint32_t WHIRLPOOL_GAP = 7960;
 
-const uint32_t whirlpool_CARRIER_FREQUENCY = 38000;
+const uint32_t WHIRLPOOL_CARRIER_FREQUENCY = 38000;
 
-const uint8_t whirlpool_STATE_LENGTH = 21;
+const uint8_t WHIRLPOOL_STATE_LENGTH = 21;
 
-const uint8_t whirlpool_HEAT = 0;
-const uint8_t whirlpool_DRY = 3;
-const uint8_t whirlpool_COOL = 2;
-const uint8_t whirlpool_FAN = 4;
-const uint8_t whirlpool_AUTO = 1;
+const uint8_t WHIRLPOOL_HEAT = 0;
+const uint8_t WHIRLPOOL_DRY = 3;
+const uint8_t WHIRLPOOL_COOL = 2;
+const uint8_t WHIRLPOOL_FAN = 4;
+const uint8_t WHIRLPOOL_AUTO = 1;
 
-const uint8_t whirlpool_FAN_AUTO = 0;
-const uint8_t whirlpool_FAN_HIGH = 1;
-const uint8_t whirlpool_FAN_MED = 2;
-const uint8_t whirlpool_FAN_LOW = 3;
+const uint8_t WHIRLPOOL_FAN_AUTO = 0;
+const uint8_t WHIRLPOOL_FAN_HIGH = 1;
+const uint8_t WHIRLPOOL_FAN_MED = 2;
+const uint8_t WHIRLPOOL_FAN_LOW = 3;
 
-const uint8_t whirlpool_SWING_MASK = 128; //TBD ON HITACHI
+const uint8_t WHIRLPOOL_SWING_MASK = 128;
 
-const uint8_t whirlpool_POWER = 0x04;
+const uint8_t WHIRLPOOL_POWER = 0x04;
 
-void whirlpoolClimate::transmit_state() {
+void WhirlpoolClimate::transmit_state() {
   this->last_transmit_time_ = millis();  // setting the time of the last transmission.
-  uint8_t remote_state[whirlpool_STATE_LENGTH] = {0};
-  remote_state[0] = 0x95;
-  remote_state[1] = 0x9A;
-  remote_state[6] = 0x01;
+  uint8_t remote_state[WHIRLPOOL_STATE_LENGTH] = {0};
+  remote_state[0] = 0x83;
+  remote_state[1] = 0x06;
+  remote_state[6] = 0x80;
   // MODEL DG11J191
-  remote_state[18] = 0x1C; //or 14?
+  remote_state[18] = 0x08;
 
   auto powered_on = this->mode != climate::CLIMATE_MODE_OFF;
   if (powered_on != this->powered_on_assumed) {
@@ -53,23 +53,23 @@ void whirlpoolClimate::transmit_state() {
       // set fan auto
       // set temp auto temp
       // set sleep false
-      remote_state[3] = whirlpool_AUTO;
+      remote_state[3] = WHIRLPOOL_AUTO;
       remote_state[15] = 0x17;
       break;
     case climate::CLIMATE_MODE_HEAT:
-      remote_state[3] = whirlpool_HEAT;
+      remote_state[3] = WHIRLPOOL_HEAT;
       remote_state[15] = 6;
       break;
     case climate::CLIMATE_MODE_COOL:
-      remote_state[3] = whirlpool_COOL;
+      remote_state[3] = WHIRLPOOL_COOL;
       remote_state[15] = 6;
       break;
     case climate::CLIMATE_MODE_DRY:
-      remote_state[3] = whirlpool_DRY;
+      remote_state[3] = WHIRLPOOL_DRY;
       remote_state[15] = 6;
       break;
     case climate::CLIMATE_MODE_FAN_ONLY:
-      remote_state[3] = whirlpool_FAN;
+      remote_state[3] = WHIRLPOOL_FAN;
       remote_state[15] = 6;
       break;
     case climate::CLIMATE_MODE_OFF:
@@ -84,13 +84,13 @@ void whirlpoolClimate::transmit_state() {
   // Fan speed
   switch (this->fan_mode.value()) {
     case climate::CLIMATE_FAN_HIGH:
-      remote_state[2] |= whirlpool_FAN_HIGH;
+      remote_state[2] |= WHIRLPOOL_FAN_HIGH;
       break;
     case climate::CLIMATE_FAN_MEDIUM:
-      remote_state[2] |= whirlpool_FAN_MED;
+      remote_state[2] |= WHIRLPOOL_FAN_MED;
       break;
     case climate::CLIMATE_FAN_LOW:
-      remote_state[2] |= whirlpool_FAN_LOW;
+      remote_state[2] |= WHIRLPOOL_FAN_LOW;
       break;
     default:
       break;
@@ -126,30 +126,30 @@ void whirlpoolClimate::transmit_state() {
   data->set_carrier_frequency(38000);
 
   // Header
-  data->mark(whirlpool_HEADER_MARK);
-  data->space(whirlpool_HEADER_SPACE);
+  data->mark(WHIRLPOOL_HEADER_MARK);
+  data->space(WHIRLPOOL_HEADER_SPACE);
   // Data
   auto bytes_sent = 0;
   for (uint8_t i : remote_state) {
     for (uint8_t j = 0; j < 8; j++) {
-      data->mark(whirlpool_BIT_MARK);
+      data->mark(WHIRLPOOL_BIT_MARK);
       bool bit = i & (1 << j);
-      data->space(bit ? whirlpool_ONE_SPACE : whirlpool_ZERO_SPACE);
+      data->space(bit ? WHIRLPOOL_ONE_SPACE : WHIRLPOOL_ZERO_SPACE);
     }
     bytes_sent++;
     if (bytes_sent == 6 || bytes_sent == 14) {
       // Divider
-      data->mark(whirlpool_BIT_MARK);
-      data->space(whirlpool_GAP);
+      data->mark(WHIRLPOOL_BIT_MARK);
+      data->space(WHIRLPOOL_GAP);
     }
   }
   // Footer
-  data->mark(whirlpool_BIT_MARK);
+  data->mark(WHIRLPOOL_BIT_MARK);
 
   transmit.perform();
 }
 
-bool whirlpoolClimate::on_receive(remote_base::RemoteReceiveData data) {
+bool WhirlpoolClimate::on_receive(remote_base::RemoteReceiveData data) {
   // Check if the esp isn't currently transmitting.
   if (millis() - this->last_transmit_time_ < 500) {
     ESP_LOGV(TAG, "Blocked receive because of current trasmittion");
@@ -157,24 +157,24 @@ bool whirlpoolClimate::on_receive(remote_base::RemoteReceiveData data) {
   }
 
   // Validate header
-  if (!data.expect_item(whirlpool_HEADER_MARK, whirlpool_HEADER_SPACE)) {
+  if (!data.expect_item(WHIRLPOOL_HEADER_MARK, WHIRLPOOL_HEADER_SPACE)) {
     ESP_LOGV(TAG, "Header fail");
     return false;
   }
 
-  uint8_t remote_state[whirlpool_STATE_LENGTH] = {0};
+  uint8_t remote_state[WHIRLPOOL_STATE_LENGTH] = {0};
   // Read all bytes.
-  for (int i = 0; i < whirlpool_STATE_LENGTH; i++) {
+  for (int i = 0; i < WHIRLPOOL_STATE_LENGTH; i++) {
     // Read bit
     if (i == 6 || i == 14) {
-      if (!data.expect_item(whirlpool_BIT_MARK, whirlpool_GAP))
+      if (!data.expect_item(WHIRLPOOL_BIT_MARK, WHIRLPOOL_GAP))
         return false;
     }
     for (int j = 0; j < 8; j++) {
-      if (data.expect_item(whirlpool_BIT_MARK, whirlpool_ONE_SPACE)) {
+      if (data.expect_item(WHIRLPOOL_BIT_MARK, WHIRLPOOL_ONE_SPACE)) {
         remote_state[i] |= 1 << j;
 
-      } else if (!data.expect_item(whirlpool_BIT_MARK, whirlpool_ZERO_SPACE)) {
+      } else if (!data.expect_item(WHIRLPOOL_BIT_MARK, WHIRLPOOL_ZERO_SPACE)) {
         ESP_LOGV(TAG, "Byte %d bit %d fail", i, j);
         return false;
       }
@@ -183,7 +183,7 @@ bool whirlpoolClimate::on_receive(remote_base::RemoteReceiveData data) {
     ESP_LOGVV(TAG, "Byte %d %02X", i, remote_state[i]);
   }
   // Validate footer
-  if (!data.expect_mark(whirlpool_BIT_MARK)) {
+  if (!data.expect_mark(WHIRLPOOL_BIT_MARK)) {
     ESP_LOGV(TAG, "Footer fail");
     return false;
   }
@@ -215,9 +215,9 @@ bool whirlpoolClimate::on_receive(remote_base::RemoteReceiveData data) {
     return false;
 
   // powr on/off button
-  ESP_LOGV(TAG, "Power: %02X", (remote_state[2] & whirlpool_POWER));
+  ESP_LOGV(TAG, "Power: %02X", (remote_state[2] & WHIRLPOOL_POWER));
 
-  if ((remote_state[2] & whirlpool_POWER) == whirlpool_POWER) {
+  if ((remote_state[2] & WHIRLPOOL_POWER) == WHIRLPOOL_POWER) {
     auto powered_on = this->mode != climate::CLIMATE_MODE_OFF;
 
     if (powered_on) {
@@ -233,19 +233,19 @@ bool whirlpoolClimate::on_receive(remote_base::RemoteReceiveData data) {
     auto mode = remote_state[3] & 0x7;
     ESP_LOGV(TAG, "Mode: %02X", mode);
     switch (mode) {
-      case whirlpool_HEAT:
+      case WHIRLPOOL_HEAT:
         this->mode = climate::CLIMATE_MODE_HEAT;
         break;
-      case whirlpool_COOL:
+      case WHIRLPOOL_COOL:
         this->mode = climate::CLIMATE_MODE_COOL;
         break;
-      case whirlpool_DRY:
+      case WHIRLPOOL_DRY:
         this->mode = climate::CLIMATE_MODE_DRY;
         break;
-      case whirlpool_FAN:
+      case WHIRLPOOL_FAN:
         this->mode = climate::CLIMATE_MODE_FAN_ONLY;
         break;
-      case whirlpool_AUTO:
+      case WHIRLPOOL_AUTO:
         this->mode = climate::CLIMATE_MODE_HEAT_COOL;
         break;
     }
@@ -263,23 +263,23 @@ bool whirlpoolClimate::on_receive(remote_base::RemoteReceiveData data) {
   auto fan = remote_state[2] & 0x03;
   ESP_LOGVV(TAG, "Fan: %02X", fan);
   switch (fan) {
-    case whirlpool_FAN_HIGH:
+    case WHIRLPOOL_FAN_HIGH:
       this->fan_mode = climate::CLIMATE_FAN_HIGH;
       break;
-    case whirlpool_FAN_MED:
+    case WHIRLPOOL_FAN_MED:
       this->fan_mode = climate::CLIMATE_FAN_MEDIUM;
       break;
-    case whirlpool_FAN_LOW:
+    case WHIRLPOOL_FAN_LOW:
       this->fan_mode = climate::CLIMATE_FAN_LOW;
       break;
-    case whirlpool_FAN_AUTO:
+    case WHIRLPOOL_FAN_AUTO:
     default:
       this->fan_mode = climate::CLIMATE_FAN_AUTO;
       break;
   }
 
   // Set received swing status
-  if ((remote_state[2] & whirlpool_SWING_MASK) == whirlpool_SWING_MASK && remote_state[8] == 0x40) {
+  if ((remote_state[2] & WHIRLPOOL_SWING_MASK) == WHIRLPOOL_SWING_MASK && remote_state[8] == 0x40) {
     ESP_LOGVV(TAG, "Swing toggle pressed ");
     if (this->swing_mode == climate::CLIMATE_SWING_OFF) {
       this->swing_mode = climate::CLIMATE_SWING_VERTICAL;
