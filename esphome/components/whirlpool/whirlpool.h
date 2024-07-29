@@ -7,12 +7,15 @@ namespace whirlpool {
 
 /// Simple enum to represent models.
 enum Model {
+  MODEL_DG11J1_3A = 0,  /// Temperature range is from 18 to 32
   MODEL_DG11J1_91 = 1,  /// Temperature range is from 16 to 30
 };
 
 // Temperature
-const float whirlpool_DG11J1_91_TEMP_MAX = 30.0;
-const float whirlpool_DG11J1_91_TEMP_MIN = 16.0;
+const float WHIRLPOOL_DG11J1_3A_TEMP_MAX = 32.0;
+const float WHIRLPOOL_DG11J1_3A_TEMP_MIN = 18.0;
+const float WHIRLPOOL_DG11J1_91_TEMP_MAX = 30.0;
+const float WHIRLPOOL_DG11J1_91_TEMP_MIN = 16.0;
 
 class whirlpoolClimate : public climate_ir::ClimateIR {
  public:
