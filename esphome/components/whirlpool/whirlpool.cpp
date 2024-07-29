@@ -8,10 +8,10 @@ static const char *const TAG = "whirlpool.climate";
 
 const uint16_t WHIRLPOOL_HEADER_MARK = 9000;
 const uint16_t WHIRLPOOL_HEADER_SPACE = 4494;
-const uint16_t WHIRLPOOL_BIT_MARK = 572;
-const uint16_t WHIRLPOOL_ONE_SPACE = 1659;
-const uint16_t WHIRLPOOL_ZERO_SPACE = 553;
-const uint32_t WHIRLPOOL_GAP = 7960;
+const uint16_t WHIRLPOOL_BIT_MARK = 610;
+const uint16_t WHIRLPOOL_ONE_SPACE = 1680;
+const uint16_t WHIRLPOOL_ZERO_SPACE = 565;
+const uint32_t WHIRLPOOL_GAP = 8007;
 
 const uint32_t WHIRLPOOL_CARRIER_FREQUENCY = 38000;
 
@@ -35,11 +35,11 @@ const uint8_t WHIRLPOOL_POWER = 0x04;
 void WhirlpoolClimate::transmit_state() {
   this->last_transmit_time_ = millis();  // setting the time of the last transmission.
   uint8_t remote_state[WHIRLPOOL_STATE_LENGTH] = {0};
-  remote_state[0] = 0x83;
-  remote_state[1] = 0x06;
-  remote_state[6] = 0x80;
+  remote_state[0] = 0x95;
+  remote_state[1] = 0x9A;
+  remote_state[6] = 0x01;
   // MODEL DG11J191
-  remote_state[18] = 0x08;
+  remote_state[18] = 0x1C;
 
   auto powered_on = this->mode != climate::CLIMATE_MODE_OFF;
   if (powered_on != this->powered_on_assumed) {
