@@ -73,6 +73,8 @@ void WhirlpoolClimate::transmit_state() {
       remote_state[15] = 6;
       break;
     case climate::CLIMATE_MODE_OFF:
+      remote_state[2] = 4;
+      remote_state[3] = WHIRLPOOL_AUTO;
     default:
       break;
   }
