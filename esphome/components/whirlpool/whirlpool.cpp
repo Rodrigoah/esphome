@@ -39,6 +39,7 @@ void WhirlpoolClimate::transmit_state() {
   remote_state[1] = 0x59;
   remote_state[10] = 0x20;
   remote_state[6] = 0x80;
+   remote_state[19] = 0x08;
   // MODEL DG11J191
   remote_state[18] = 0x70;
 
