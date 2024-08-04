@@ -39,7 +39,8 @@ void WhirlpoolClimate::transmit_state() {
   remote_state[1] = 0x59;
   remote_state[10] = 0x20;
   remote_state[6] = 0x80;
-   remote_state[19] = 0x08;
+  remote_state[18] = 0x38;
+  remote_state[19] = 0x08;
   // MODEL DG11J191
   remote_state[18] = 0x70;
 
@@ -77,6 +78,7 @@ void WhirlpoolClimate::transmit_state() {
     case climate::CLIMATE_MODE_OFF:
       remote_state[2] = 4;
       remote_state[3] = WHIRLPOOL_COOL;
+      remote_state[18] = 0x28;
     default:
       break;
   }
