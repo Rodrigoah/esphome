@@ -6,8 +6,8 @@ namespace whirlpool {
 
 static const char *const TAG = "whirlpool.climate";
 
-const float MAX_TEMP = 30.0;
-const float MIN_TEMP = 16.0;
+//const float MAX_TEMP = 30.0;
+//const float MIN_TEMP = 16.0;
 
 const uint16_t WHIRLPOOL_HEADER_MARK = 9000;
 const uint16_t WHIRLPOOL_HEADER_SPACE = 4494;
