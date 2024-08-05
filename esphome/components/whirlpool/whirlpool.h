@@ -12,15 +12,14 @@ enum Model {
 };
 
 // Temperature
-const float WHIRLPOOL_DG11J1_3A_TEMP_MAX = 30.0;
-const float WHIRLPOOL_DG11J1_3A_TEMP_MIN = 16.0;
-const float WHIRLPOOL_DG11J1_91_TEMP_MAX = 30.0;
-const float WHIRLPOOL_DG11J1_91_TEMP_MIN = 16.0;
+const float MAX_TEMP = 30.0;
+const float MIN_TEMP = 16.0;
+
 
 class WhirlpoolClimate : public climate_ir::ClimateIR {
  public:
   WhirlpoolClimate()
-      : climate_ir::ClimateIR(temperature_min_(), temperature_max_(), 1.0f, true, true,
+      : climate_ir::ClimateIR(MIN_TEMP, MAX_TEMP, 1.0f, true, true,
                               {climate::CLIMATE_FAN_AUTO, climate::CLIMATE_FAN_LOW, climate::CLIMATE_FAN_MEDIUM,
                                climate::CLIMATE_FAN_HIGH},
                               {climate::CLIMATE_SWING_OFF, climate::CLIMATE_SWING_VERTICAL}) {}
@@ -53,12 +52,6 @@ class WhirlpoolClimate : public climate_ir::ClimateIR {
   bool send_swing_cmd_{false};
   Model model_;
 
-  float temperature_min_() {
-    return (model_ == MODEL_DG11J1_3A) ? WHIRLPOOL_DG11J1_3A_TEMP_MIN : WHIRLPOOL_DG11J1_91_TEMP_MIN;
-  }
-  float temperature_max_() {
-    return (model_ == MODEL_DG11J1_3A) ? WHIRLPOOL_DG11J1_3A_TEMP_MAX : WHIRLPOOL_DG11J1_91_TEMP_MAX;
-  }
 };
 
 }  // namespace whirlpool
