@@ -10,8 +10,8 @@ namespace whirlpool {
 
 
 // Temperature
-const float MAX_TEMP = 30.0;
-const float MIN_TEMP = 16.0;
+//const float MAX_TEMP = 30.0;
+//const float MIN_TEMP = 16.0;
 
 
 class WhirlpoolClimate : public climate_ir::ClimateIR {
