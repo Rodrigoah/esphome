@@ -5,11 +5,9 @@
 namespace esphome {
 namespace whirlpool {
 
-/// Simple enum to represent models.
-enum Model {
-  MODEL_DG11J1_3A = 0,  /// Temperature range is from 18 to 32
-  MODEL_DG11J1_91 = 1,  /// Temperature range is from 16 to 30
-};
+
+
+
 
 // Temperature
 const float MAX_TEMP = 30.0;
@@ -36,7 +34,7 @@ class WhirlpoolClimate : public climate_ir::ClimateIR {
     climate_ir::ClimateIR::control(call);
   }
 
-  void set_model(Model model) { this->model_ = model; }
+  
 
   // used to track when to send the power toggle command
   bool powered_on_assumed;
@@ -50,7 +48,7 @@ class WhirlpoolClimate : public climate_ir::ClimateIR {
   int32_t last_transmit_time_{};
 
   bool send_swing_cmd_{false};
-  Model model_;
+
 
 };
 
