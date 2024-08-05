@@ -6,9 +6,6 @@ namespace whirlpool {
 
 static const char *const TAG = "whirlpool.climate";
 
-//const float MAX_TEMP = 30.0;
-//const float MIN_TEMP = 16.0;
-
 const uint16_t WHIRLPOOL_HEADER_MARK = 9000;
 const uint16_t WHIRLPOOL_HEADER_SPACE = 4494;
 const uint16_t WHIRLPOOL_BIT_MARK = 610;
@@ -44,7 +41,8 @@ void WhirlpoolClimate::transmit_state() {
   remote_state[6] = 0x80;
   remote_state[18] = 0x38;
   remote_state[19] = 0x08;
-
+  // MODEL DG11J191
+  //remote_state[18] = 0x70;
 
   auto powered_on = this->mode != climate::CLIMATE_MODE_OFF;
   if (powered_on != this->powered_on_assumed) {
@@ -87,8 +85,8 @@ void WhirlpoolClimate::transmit_state() {
   }
 
   // Temperature
-  auto temp = (uint8_t) roundf(clamp(this->target_temperature, MIN_TEMP , MAX_TEMP ));
-  remote_state[3] |= (uint8_t) (temp - this->MIN_TEMP) << 4;
+  auto temp = (uint8_t) roundf(clamp(this->target_temperature, this->temperature_min_(), this->temperature_max_()));
+  remote_state[3] |= (uint8_t) (temp - this->temperature_min_()) << 4;
 
   // Fan speed
   switch (this->fan_mode.value()) {
