@@ -1,4 +1,4 @@
-#include "Hitachi_168bit.h"
+#include "hitachi_168bit.h"
 #include "esphome/core/log.h"
 
 namespace esphome {
