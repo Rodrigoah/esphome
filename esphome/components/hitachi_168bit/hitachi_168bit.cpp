@@ -80,6 +80,7 @@ void Hitachi168bitClimate::transmit_state() {
       remote_state[3] = HITACHI168BIT_COOL;
       remote_state[15] = 1;
       remote_state[18] = 0x28;
+      break;
     default:
       break;
   }

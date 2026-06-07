@@ -29,7 +29,10 @@ class Hitachi168bitClimate : public climate_ir::ClimateIR {
   }
 
   /// Override control to change settings of the climate device.
-  void control(const climate::ClimateCall &call) override { this->send_swing_cmd_ = call.get_swing_mode().has_value(); }
+  void control(const climate::ClimateCall &call) override {
+    this->send_swing_cmd_ = call.get_swing_mode().has_value();
+    climate_ir::ClimateIR::control(call);
+  }
 
   void set_model(Model model) { this->model_ = model; }
 
@@ -45,7 +48,7 @@ class Hitachi168bitClimate : public climate_ir::ClimateIR {
   int32_t last_transmit_time_{};
 
   bool send_swing_cmd_{false};
-  Model model_;
+  Model model_{MODEL_HCRA31NEWH};
 
   float temperature_min_() { return HITACHI168BIT_HCRA31NEWH_TEMP_MIN; }
   float temperature_max_() { return HITACHI168BIT_HCRA31NEWH_TEMP_MAX; }
